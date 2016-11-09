@@ -1,6 +1,16 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
-if [[ $1 = 'fix' ]]; then 
+files="*.c"
+
+if [ $1 = 'fix' ]; then 
+
+    #If any arguments after 'fix' are present, use them as files
+    if [ $# -gt 1 ]; then
+	files="$2"
+    elif [ "*.c" = '*.c' ]; then
+	echo "Error: no C files are present"
+	exit
+    fi
 
 #Welcome to regex hell :D
 	vim -N -u NONE -E \
@@ -15,10 +25,11 @@ if [[ $1 = 'fix' ]]; then
  %s/\w\zs\ze=/ /ge |
  %s/\w\zs\ze!/ /ge |
  w" \
-	 -c wq *.c
+	 -c wq "$files"
 else 
     echo "this program makes a heap of changes to your *.c files"
-    echo "Be careful, either understand it or run it on a backup copy"
+    echo "(or whatever files you specified to edit)"
+    echo "Be careful, either understand it or run it on a backup copy,"
     echo "otherwise you use at your own risk."
     echo
     echo "Enter the argument 'fix' to run"
